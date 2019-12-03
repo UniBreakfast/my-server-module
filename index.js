@@ -9,6 +9,6 @@ module.exports = (port, dev=!process.env.PORT)=> {
       delete require.cache[require.resolve('./handlereq')]
     }
 
-  require('http').createServer(handleReq).listen(port,
+  return require('http').createServer(handleReq).listen(port,
     ()=> dev? console.log('Server started at http://localhost:'+port) :0)
 }

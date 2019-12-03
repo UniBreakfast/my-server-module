@@ -1,6 +1,8 @@
 const fs = require('fs'), fsp = fs.promises
 
 module.exports = async (req, resp, dev)=> {
+  const { api, session, pass } = req.socket._server
+  if (api) api()
   let { url } = req
 
   if (url=='/favicon.ico' && dev) url = '/devicon.ico'
@@ -25,6 +27,6 @@ module.exports = async (req, resp, dev)=> {
       js: 'application/javascript',
     }[ext])
 
-  } catch { resp.end(url+' is not available') }
+  } catch { resp.end('... sorry, '+url+' is not available') }
 
 }
