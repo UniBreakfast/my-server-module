@@ -1,27 +1,30 @@
+const fs = require('fs'), fsp = fs.promises
 
-module.exports = (req, resp)=> {
-
+module.exports = async (req, resp, dev)=> {
   let { url } = req
 
-  if (url=='/') url = '/index.html'
-  if (url=='/favicon.ico' && !process.env.PORT) url = '/devicon.ico'
+  if (url=='/favicon.ico' && dev) url = '/devicon.ico'
 
-  fs.readFile('public'+url, (err, data)=> {
-    if (err) return resp.end(url+' is unavailable')
+  let path = process.cwd()+'/public'+url
 
-    const ext = url.match(/\.(\w+)$/),
-          type = ext? {
-            html: 'text/html',
-            json: 'application/json',
-            css: 'text/css',
-            ico: 'image/x-icon',
-            jpg: 'image/jpeg',
-            js: 'application/javascript',
-          }[ext[1]] : ''
-    if (ext) resp.setHeader('Content-Type', type)
+  try {
+    const target = await fsp.stat(path).catch(_=> fsp.stat(path+'.html'))
+    if (target.isDirectory()) path += '/index'
+    const match = path.match(/\.(\w+)$/), ext = match? match[1] : 'html'
+    if (!match) path += '.html'
 
-    resp.end(data)
-  })
+    fs.createReadStream(path).pipe(resp)
+
+    resp.setHeader('Content-Type', {
+      html: 'text/html',
+      json: 'application/json',
+      css: 'text/css',
+      ico: 'image/x-icon',
+      jpg: 'image/jpeg',
+      gif: 'image/gif',
+      js: 'application/javascript',
+    }[ext])
+
+  } catch { resp.end(url+' is not available') }
+
 }
-
-const fs = require('fs')

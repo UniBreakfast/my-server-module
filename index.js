@@ -5,10 +5,10 @@ module.exports = (port, dev=!process.env.PORT)=> {
     var handleReq = require('./handlereq')
   else
     var handleReq = (req, resp)=> {
-      require('./handlereq')(req, resp)
+      require('./handlereq')(req, resp, dev)
       delete require.cache[require.resolve('./handlereq')]
     }
 
   require('http').createServer(handleReq).listen(port,
-    ()=> dev? console.log('Server started on port '+port) :0)
+    ()=> dev? console.log('Server started at http://localhost:'+port) :0)
 }

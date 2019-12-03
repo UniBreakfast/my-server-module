@@ -1,0 +1,21 @@
+{
+  "name": "my-server-module",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node lonerun"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/UniBreakfast/my-server-module.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/UniBreakfast/my-server-module/issues"
+  },
+  "homepage": "https://github.com/UniBreakfast/my-server-module#readme"
+}
