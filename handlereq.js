@@ -1,9 +1,21 @@
 const fs = require('fs'), fsp = fs.promises
 
 module.exports = async (req, resp, dev)=> {
-  const { api, session, pass } = req.socket._server
-  if (api) api()
+  const { api } = req.socket._server
+
   let { url } = req
+
+  if (api && url.startsWith('/api/')) {
+    const reqBody = (parts=[])=> new Promise((resolve, reject)=>
+      req.on('error', reject).on('data', part => parts.push(part))
+        .on('end', ()=> resolve(Buffer.concat(parts).toString('utf8'))))
+    try {
+      const data = await api(req, JSON.parse(await reqBody()), dev)
+      resp.setHeader('Content-Type', 'application/json')
+      return resp.end(JSON.stringify(data))
+    }
+    catch (e) { console.log('api error:', e) }
+  }
 
   if (url=='/favicon.ico' && dev) url = '/devicon.ico'
 
@@ -27,6 +39,6 @@ module.exports = async (req, resp, dev)=> {
       js: 'application/javascript',
     }[ext])
 
-  } catch { resp.end('... sorry, '+url+' is not available') }
+  } catch { resp.end('"... sorry, '+url+' is not available"') }
 
 }
