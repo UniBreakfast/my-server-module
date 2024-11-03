@@ -1,4 +1,5 @@
-# my-server-module
+# [my-server-module](https://github.com/UniBreakfast/my-server-module)
+
 ## a server module part of [my-modular-server](https://github.com/UniBreakfast/my-modular-server) project
 
 ![flowcahrt diagram](public/flowchart.png)
